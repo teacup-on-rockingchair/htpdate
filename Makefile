@@ -5,17 +5,18 @@ mandir = ${prefix}/share/man
 CC       ?= gcc
 CFLAGS   += -Wall -std=c11 -pedantic -O2
 SSL_LIBS ?= -lssl
+LDLIBS += -lsystemd
 
 INSTALL ?= install -c
 STRIP   ?= strip -s
 
-all: htpdate
+all: https
 
 htpdate: htpdate.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -o htpdate htpdate.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -o htpdate htpdate.c $(LDLIBS)
 
 https: htpdate.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -DENABLE_HTTPS -o htpdate htpdate.c $(SSL_LIBS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -DENABLE_HTTPS -o htpdate htpdate.c $(LDLIBS) $(SSL_LIBS)
 
 install: all
 	$(STRIP) htpdate

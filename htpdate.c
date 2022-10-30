@@ -61,6 +61,8 @@
 #include <openssl/ssl.h>
 #endif
 
+#include <systemd/sd-journal.h>
+
 #define VERSION                  "1.3.6"
 #define MAX_HTTP_HOSTS           16                /* 16 web servers */
 #define DEFAULT_HTTP_PORT        "80"
@@ -112,7 +114,7 @@ static void printlog(int is_error, char *format, ...) {
     va_end(args);
 
     if (logmode)
-        syslog(is_error?LOG_WARNING:LOG_INFO, "%s", buf);
+        sd_journal_print(is_error?LOG_WARNING:LOG_INFO, "%s", buf);
     else
         fprintf(is_error?stderr:stdout, "%s\n", buf);
 }
